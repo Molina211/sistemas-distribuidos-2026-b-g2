@@ -5,35 +5,35 @@
 # Weekly Status - Week 01
 
 <!-- CONFIG-START - must match your profile repo (username/username) CONFIG -->
-- FULL_NAME: Jhon Sebastián Molina Fierro
+- FULL_NAME: Jhon Sebastian Molina Fierro
 - GITHUB_USER: Molina211
 - TEAM: ErrorCapa8
-- SPRINT_GOAL: Presentation of the subject and creation of the initial PDR
+- SPRINT_GOAL: Course introduction and creation of the initial PDR
 <!-- CONFIG-END -->
 
 ## 1. User stories worked this week
 | HU ID | Title | Status (todo/doing/done) | Evidence (PR or commit URL) |
 |---|---|---|---|
-| HU--001 | None | None | None |
+| HU--001 | N/A | N/A | N/A |
 
 ## 2. My individual contribution
-- Ayudé a analizar el problema del cliente e identificar las principales necesidades del negocio.
-- La adquisición de conocimientos correspondientes a fundamentos y conceptos de sistemas distribuidos.
-- Se obtuvieron plantillas de excel con la información cargado sobre el comportamiento financiero, el portafolio, alimentación, hospedaje y movilidad de la empresa.
+- I helped analyze the client's problem and identify the main business needs.
+- I strengthened my knowledge of distributed systems fundamentals and core concepts.
+- Excel templates were obtained with information about the company's financial behavior, portfolio, food, lodging, and transportation.
 
 ## 3. Blockers and risks
-- La regla exacta de descuentos sigue pendiente de confirmación del cliente.
-- El valor inicial de la base diaria de caja aún no está confirmado.
-- Los perfiles formales del sistema todavía no están completamente definidos.
-- Algunos ajustes dentro de la ejecución todavía pueden requerir validación final con el cliente.
-- Varios requerimientos no funcionales aún necesitan criterios más claros de validación, especialmente disponibilidad, rendimiento, respaldo y recuperación, accesibilidad y mantenibilidad.
+- The exact discount rule is still pending client confirmation.
+- The initial amount for the daily cash base is not yet confirmed.
+- The formal system profiles are not fully defined yet.
+- Some adjustments within execution may still require final validation with the client.
+- Several non-functional requirements still need clearer validation criteria, especially availability, performance, backup and recovery, accessibility, and maintainability.
 
 ## 4. Plan for next week
-- Seguir refindando el PDR si aparecen nuevas validaciones del cliente.
-- Practicas de Scrum y Canvas puestas en reapredidaje.
+- Continue refining the PDR if new client validations appear.
+- Continue practicing Scrum and Canvas concepts.
 
 ## 5. Compliance self-check
-- [✅] Criterios de aceptación comprobables.
+- [x] Testable acceptance criteria.
 
 ## 6. Evidence links
-- [Preguntas y respuestas](./preguntas-respuestas-cliente-travesia-natural.md)
+- [Questions and answers](./BusinessData/preguntas-respuestas-cliente-travesia-natural.md)
