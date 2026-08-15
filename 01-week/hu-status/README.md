@@ -20,6 +20,8 @@
 - I helped analyze the client's problem and identify the main business needs.
 - I strengthened my knowledge of distributed systems fundamentals and core concepts.
 - Excel templates were obtained with information about the company's financial behavior, portfolio, food, lodging, and transportation.
+- Write the ADR-001 using the technology stack.
+- Create the documentation repository (docs)
 
 ## 3. Blockers and risks
 - The exact discount rule is still pending client confirmation.
@@ -37,3 +39,5 @@
 
 ## 6. Evidence links
 - [Questions and answers](./BusinessData/preguntas-respuestas-cliente-travesia-natural.md)
+- [docs](https://github.com/Molina211/Travesia-Natural-docs)
+- [ADR-001 - PLANTILLA](https://github.com/Molina211/Travesia-Natural-docs/blob/main/ADRs/ADR-001.md)
