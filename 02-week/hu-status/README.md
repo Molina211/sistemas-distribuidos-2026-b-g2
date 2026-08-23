@@ -23,6 +23,7 @@
 - I created a dedicated repository for my presentation and to better showcase my GitHub/Portfolio.
 - I created the weekly repository, forked by the instructor.
 - Weekly summary of the evaluation period.
+- The weekly challenges were completed at the end of each session in Moodle.
 
 ## 3. Blockers and risks
 - There are still pending PDR validations that may affect upcoming planning decisions.
@@ -46,3 +47,4 @@
 - [Git Personal](https://github.com/Molina211/Molina211)
 - [Git Weekly](https://github.com/Molina211/sistemas-distribuidos-2026-b-g2)
 - [Weekly Summary](./WeeklySummary/Week-02.png)
+- [Weekly Challenge](./WeeklySummary/WeeklyChallenge/)
