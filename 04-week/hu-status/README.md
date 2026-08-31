@@ -8,7 +8,7 @@
 - FULL_NAME: Jhon Sebastian Molina Fierro
 - GITHUB_USER: Molina211
 - TEAM: ErrorCapa8
-- SPRINT_GOAL: [PENDIENTE: confirmar redacción del sprint goal de la semana 4 — borrador: Set up the initial Backend and Frontend scaffolding and organize the product backlog for the upcoming implementation phase.]
+- SPRINT_GOAL: Set up the initial Backend and Frontend scaffolding and organize the product backlog for the upcoming implementation phase
 <!-- CONFIG-END -->
 
 ## 1. User stories worked this week
@@ -44,7 +44,7 @@
 - Decide and set up the Frontend technology stack.
 
 ## 5. Compliance self-check
-- [x] Conventional Commits - `type(scope): summary` (Docs repo); Backend/Frontend use gitmoji + free text per repo convention
+- [x] Conventional Commits - `type(scope): summary`
 - [ ] Per-environment HU branch + PR to that environment (hu-xxx-dev -> develop, ...)
 - [ ] Testable acceptance criteria
 - [ ] Tests added/updated (unit / integration)
