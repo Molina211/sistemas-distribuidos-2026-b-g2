@@ -1,0 +1,408 @@
+openapi: 3.0.3
+info:
+  title: Multitour Backend - Contrato MVP1
+  description: >
+    Contrato minimo del flujo "cliente ve catalogo, crea y paga una reserva",
+    tomado directamente de los controllers reales del repo Backend
+    (com.corhuila.errorcapa8.travesia_natural). No cubre la totalidad de
+    endpoints existentes (25 specs) - solo el corte definido como MVP1 para
+    el reto de la Sesion 2 de la Semana 04.
+  version: "1.0.0-mvp1"
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /health:
+    get:
+      summary: Verificar que la aplicacion esta arriba
+      tags: [Infraestructura]
+      responses:
+        "200":
+          description: La aplicacion responde
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: UP
+
+  /api/tenants/{tenantId}/login:
+    post:
+      summary: Autenticar cliente final y obtener JWT
+      tags: [Autenticacion]
+      parameters:
+        - $ref: "#/components/parameters/tenantId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: Credenciales invalidas, tenant inexistente o inactivo (mismo error generico por seguridad)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/tenants/{tenantId}/catalog-items:
+    get:
+      summary: Listar items del catalogo operativo de un tenant
+      tags: [Catalogo]
+      parameters:
+        - $ref: "#/components/parameters/tenantId"
+      responses:
+        "200":
+          description: Lista de items del catalogo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CatalogItemResponse"
+
+  /api/tenants/{tenantId}/catalog-items/{itemId}:
+    get:
+      summary: Consultar el detalle de un item del catalogo
+      tags: [Catalogo]
+      parameters:
+        - $ref: "#/components/parameters/tenantId"
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Detalle del item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CatalogItemResponse"
+        "404":
+          description: Item o tenant no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/tenants/{tenantId}/reservations:
+    post:
+      summary: Crear una reserva (requiere JWT del cliente autenticado)
+      tags: [Reservas]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/tenantId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateReservationRequest"
+      responses:
+        "201":
+          description: Reserva creada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationResponse"
+        "400":
+          description: Datos obligatorios faltantes (tenantId, customerId o ningun servicio reservado)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: El tenant del JWT no coincide con el tenantId de la URL
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/tenants/{tenantId}/reservations/me:
+    get:
+      summary: Listar las reservas propias del cliente autenticado
+      tags: [Reservas]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/tenantId"
+      responses:
+        "200":
+          description: Lista de reservas del cliente autenticado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReservationResponse"
+
+  /api/tenants/{tenantId}/reservations/me/{reservationId}:
+    get:
+      summary: Consultar el detalle de una reserva propia
+      tags: [Reservas]
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/tenantId"
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Detalle de la reserva
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationResponse"
+        "404":
+          description: Reserva no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/tenants/{tenantId}/reservations/{reservationId}/payments:
+    post:
+      summary: Registrar un pago sobre una reserva
+      tags: [Pagos]
+      parameters:
+        - $ref: "#/components/parameters/tenantId"
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterPaymentRequest"
+      responses:
+        "200":
+          description: Reserva actualizada con el pago registrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationResponse"
+        "409":
+          description: El pago ya estaba resuelto (aceptado o rechazado)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    tenantId:
+      name: tenantId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Slug del tenant (ej. "travesia-natural"), no un UUID
+
+  schemas:
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    LoginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        membershipId:
+          type: string
+        tenantId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+
+    CatalogItemResponse:
+      type: object
+      properties:
+        catalogItemId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+        type:
+          type: string
+          description: "Ej. ATRACTIVO, TRANSPORTE, HOSPEDAJE, ALIMENTACION"
+        name:
+          type: string
+        price:
+          type: number
+        capacity:
+          type: integer
+          nullable: true
+        restrictions:
+          type: string
+          nullable: true
+        validFrom:
+          type: string
+          format: date
+          nullable: true
+        validTo:
+          type: string
+          format: date
+          nullable: true
+        policy:
+          type: string
+          nullable: true
+        image:
+          type: string
+          nullable: true
+        route:
+          type: string
+          nullable: true
+        operationalCost:
+          type: number
+          nullable: true
+        active:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    ReservedServiceRequest:
+      type: object
+      properties:
+        serviceReference:
+          type: string
+        partySize:
+          type: integer
+        scheduledDate:
+          type: string
+          format: date
+          nullable: true
+        transportItemId:
+          type: string
+          format: uuid
+          nullable: true
+
+    CompanionRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        document:
+          type: string
+        birthDate:
+          type: string
+          format: date
+
+    CreateReservationRequest:
+      type: object
+      required: [projectedValue, reservedServices, holderDocument]
+      properties:
+        projectedValue:
+          type: number
+        reservedServices:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReservedServiceRequest"
+        holderDocument:
+          type: string
+        companions:
+          type: array
+          items:
+            $ref: "#/components/schemas/CompanionRequest"
+
+    RegisterPaymentRequest:
+      type: object
+      required: [method, amount]
+      properties:
+        method:
+          type: string
+        amount:
+          type: number
+        supportReference:
+          type: string
+          nullable: true
+
+    ReservationResponse:
+      type: object
+      description: >
+        Se documentan solo los campos relevantes para el flujo MVP1
+        (creacion, consulta y pago). El agregado real tiene mas campos
+        (cancelacion, descuento, reembolso, finalizacion) fuera de este corte.
+      properties:
+        reservationId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+        customerId:
+          type: string
+        reservedServices:
+          type: array
+          items:
+            type: object
+        projectedValue:
+          type: number
+        finalValue:
+          type: number
+          nullable: true
+        pendingBalance:
+          type: number
+        creditBalance:
+          type: number
+        reservationStatus:
+          type: string
+        paymentStatus:
+          type: string
+        paymentMethod:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        holderDocument:
+          type: string
+        companions:
+          type: array
+          items:
+            type: object
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string

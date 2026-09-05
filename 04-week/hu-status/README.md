@@ -20,6 +20,8 @@
 | DOC-01 | Migrate the PDR v1.7 baseline into the docs repository | done | [223e9be](https://github.com/code-corhuila/travesia-natural-docs/commit/223e9be74dd567099814700653016c00d5892fe2) |
 | DOC-02 | Formalize 04-requirements: 19 functional requirements, 25 user stories and the traceability matrix | done | [648d1bd](https://github.com/code-corhuila/travesia-natural-docs/commit/648d1bd77514c8f780c9b84017f0895876b0b164) |
 | DOC-03 | Define 05-architecture: system overview, deployment, cross-cutting concerns and threat model | done | [b255042](https://github.com/code-corhuila/travesia-natural-docs/commit/b2550427d8a32832a7fef954e74be7cfa3e7e549) |
+| DOC-04 | Complete the Session 1 weekly challenge (Backend walking skeleton) | done | [WeeklySummary/WeeklyChallenge/Walking-Skeleton-Reservation-Travesia-Natural.md](./WeeklySummary/WeeklyChallenge/Walking-Skeleton-Reservation-Travesia-Natural.md) |
+| DOC-05 | Complete the Session 2 weekly challenge (MVP1 sprint: API contract, MoSCoW commitment, DoD) | done | [WeeklySummary/WeeklyChallenge/MVP1-Sprint-Plan-Travesia-Natural.md](./WeeklySummary/WeeklyChallenge/MVP1-Sprint-Plan-Travesia-Natural.md) |
 
 ## 2. My individual contribution
 - I created the Backend project skeleton (Spring Boot 4.1.1, Java 21, Gradle) with its basic dependencies and default bootstrap class (`14db12f`, 2026-08-27).
