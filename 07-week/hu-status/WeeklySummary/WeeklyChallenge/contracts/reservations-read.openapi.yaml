@@ -1,0 +1,109 @@
+openapi: 3.0.3
+info:
+  title: Reservations read contract (consumer view of operations-costs-service)
+  version: 1.0.0
+  description: |
+    The two read endpoints that `operations-costs-service` calls on the reservations
+    provider (today the monolith; `commercial-reservations-service` after the extraction
+    defined in ADR-004).
+
+    Consumer-driven: only the fields the consumer actually reads are described as part of
+    the contract. The provider response carries more fields (35 in the monolith's
+    `ReservationResponse`); a consumer must ignore the fields it does not know (tolerant
+    reader).
+
+    Source of each statement: `ReservationClient` and `ReservationSummary` in
+    `operations-costs-service`, and `ReservationController` / `OperationController` /
+    `ReservationResponse` / `ErrorResponse` in the monolith.
+servers:
+  - url: http://localhost:8081
+    description: Local development (monolith API port used by docker compose)
+paths:
+  /api/tenants/{tenantId}/reservations/{reservationId}:
+    get:
+      operationId: getReservation
+      summary: Read one reservation of a tenant
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: The reservation. Only the fields in ReservationSummary are contractual.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationSummary'
+        '404':
+          description: The reservation does not exist in that tenant.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/tenants/{tenantId}/reservations/pending-execution:
+    get:
+      operationId: listPendingExecution
+      summary: List the reservations of a tenant that are pending execution
+      description: |
+        `operations-costs-service` forwards this list unchanged to its own callers, so the
+        only thing it relies on is that the body is a JSON array of objects. Its callers
+        depend on the full reservation object; that contract belongs to the provider.
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+      responses:
+        '200':
+          description: Array of reservation objects (possibly empty).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+components:
+  parameters:
+    TenantId:
+      name: tenantId
+      in: path
+      required: true
+      description: Tenant identifier. A string in the monolith, not a UUID.
+      schema:
+        type: string
+  schemas:
+    ReservationSummary:
+      type: object
+      required: [reservationId, reservationStatus]
+      additionalProperties: true
+      properties:
+        reservationId:
+          type: string
+          format: uuid
+        reservationStatus:
+          type: string
+          description: |
+            The status label as the provider serializes it. Known values today:
+            "Pendiente de pago", "Confirmada", "En ejecucion", "Finalizada", "Cancelada".
+            A consumer must treat an unknown value as "unknown", not as an error, so that
+            adding a status stays a backward-compatible change.
+        finalizedBy:
+          type: string
+          nullable: true
+          description: Who finalized the reservation; empty until it is finalized.
+        finalizedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: When it was finalized; empty until it is finalized.
+    Error:
+      type: object
+      required: [error, message]
+      properties:
+        error:
+          type: string
+          example: not_found
+        message:
+          type: string

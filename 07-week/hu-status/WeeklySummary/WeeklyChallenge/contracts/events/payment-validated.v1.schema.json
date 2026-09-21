@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "payment-validated.v1.schema.json",
+  "title": "PaymentValidated v1",
+  "description": "Published by Reservations when a payment or transfer support is accepted. Consumers per the domain event catalog: Cash, Reports, Audit. Proposed contract: no publisher exists yet.",
+  "allOf": [
+    { "$ref": "envelope.v1.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "eventType": { "const": "PaymentValidated" },
+        "schemaVersion": { "const": 1 },
+        "payload": {
+          "type": "object",
+          "required": ["amount", "paymentStatus", "pendingBalance", "validator", "paymentAttemptRef"],
+          "properties": {
+            "amount": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Amount of the validated payment."
+            },
+            "paymentStatus": {
+              "type": "string",
+              "description": "Payment status of the reservation after the validation."
+            },
+            "pendingBalance": {
+              "type": "number",
+              "minimum": 0
+            },
+            "validator": {
+              "type": "string",
+              "description": "Reference of the person who validated the payment."
+            },
+            "paymentAttemptRef": {
+              "type": "string",
+              "description": "Reference of the payment attempt being validated. NOT in the catalog's minimum data for this event: added so Cash can enforce a business-level unique key against republished facts (open point of Session 1). Since nothing is published yet, including it in v1 is not a breaking change."
+            }
+          }
+        }
+      }
+    }
+  ]
+}

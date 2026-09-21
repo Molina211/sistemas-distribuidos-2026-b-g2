@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "envelope.v1.schema.json",
+  "title": "Event envelope v1",
+  "description": "Common envelope of every domain event published by the four services (Session 1). Proposed contract: no publisher exists yet. The fields follow the event rules in Docs 02-domain/domain-events.md: every tenant-scoped event carries the tenant, the actor, the occurrence time and the affected aggregate.",
+  "type": "object",
+  "required": ["eventId", "eventType", "schemaVersion", "occurredAt", "tenantId", "aggregateId", "actor", "payload"],
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique per published event. Consumers deduplicate on it (see Session 1, idempotent consumer)."
+    },
+    "eventType": {
+      "type": "string",
+      "description": "Event name from the domain event catalog, e.g. PaymentValidated."
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "MAJOR version of the schema of this eventType."
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tenantId": {
+      "type": "string",
+      "description": "Tenant identifier. A string in the monolith, not a UUID."
+    },
+    "aggregateId": {
+      "type": "string",
+      "description": "Id of the affected aggregate; also the routing key, so events of one aggregate stay ordered. The reservation id for reservation events."
+    },
+    "actor": {
+      "type": "string",
+      "description": "Reference of the actor that caused the fact."
+    },
+    "payload": {
+      "type": "object",
+      "description": "Event-specific data, defined by each event schema."
+    }
+  }
+}

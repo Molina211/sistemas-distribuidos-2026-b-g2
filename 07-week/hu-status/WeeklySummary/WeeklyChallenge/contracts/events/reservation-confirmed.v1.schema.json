@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "reservation-confirmed.v1.schema.json",
+  "title": "ReservationConfirmed v1",
+  "description": "Published by Reservations when the configured payment condition is met. Consumers per the domain event catalog: Operational Execution, Reports, Audit. Proposed contract: no publisher exists yet.",
+  "allOf": [
+    { "$ref": "envelope.v1.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "eventType": { "const": "ReservationConfirmed" },
+        "schemaVersion": { "const": 1 },
+        "payload": {
+          "type": "object",
+          "required": ["paymentStatus"],
+          "properties": {
+            "paymentStatus": {
+              "type": "string",
+              "description": "Payment status of the reservation when it was confirmed."
+            },
+            "allocatedCapacity": {
+              "type": "object",
+              "additionalProperties": true,
+              "description": "Allocated capacity, only when applicable (catalog: 'allocated capacity when applicable'). Its inner structure is not defined yet; it is left open on purpose and must be fixed before the first publisher is written."
+            }
+          }
+        }
+      }
+    }
+  ]
+}
