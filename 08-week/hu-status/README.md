@@ -68,7 +68,7 @@ In order of dependency.
 - [x] No secrets; config via environment variables - documentation only; no code or configuration was added
 
 ## 6. Evidence links
-- Class summary image for week 08 (Session 2: planning, story mapping, estimation and MVP 2 commitment): [Data/Image/ChatGPT Image 26 sept 2026, 10_38_02 a.m..png](<./Data/Image/ChatGPT Image 26 sept 2026, 10_38_02 a.m..png>). [PENDIENTE: the summary image of Session 1, and whether this one moves to `WeeklySummary/Week-08.png`]
+- Class summary image for week 08 (Session 2: planning, story mapping, estimation and MVP 2 commitment): [WeeklySummary/Week-08.png](./WeeklySummary/Week-08.png). [PENDIENTE: the summary image of Session 1]
 - Weekly Challenge Semana 08, Session 1 writeup: [WeeklySummary/WeeklyChallenge/Sprint-Execution-Backlog-Multitour.md](./WeeklySummary/WeeklyChallenge/Sprint-Execution-Backlog-Multitour.md)
 - Board: repository https://github.com/Molina211/Travesia-Natural-docs, project https://github.com/users/Molina211/projects/3, milestone https://github.com/Molina211/Travesia-Natural-docs/milestone/1
 - Course norm and annexes A to I (teacher's material): [Data/Document/](./Data/Document/)
