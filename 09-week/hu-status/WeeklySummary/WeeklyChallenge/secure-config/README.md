@@ -30,7 +30,7 @@ set -a; . ./.env; set +a; go run .    # no dotenv library: the shell loads the f
 git config core.hooksPath 09-week/hu-status/WeeklySummary/WeeklyChallenge/secure-config/githooks
 ```
 
-## Evidence (2026-10-05, Go 1.27.0, gitleaks 8.30.1)
+## Evidence (Go 1.27.0, gitleaks 8.30.1)
 
 `gofmt -l .` printed nothing, `go vet ./...` passed, and `go test -v ./...` passed 7 of 7 tests:
 the missing variables are all reported at once, the flag defaults to off, a malformed flag is
@@ -82,4 +82,5 @@ leaks. This folder (`gitleaks dir`) also has none. The hook is active in the aut
   manual step in the GitHub settings, and it waits for the real service.
 - The flag is read once at startup. Switching it means a restart, with no runtime toggle,
   which is enough for a capability that is either released or not.
-- The secure-config and rollout plan for MVP 2 is the Session 2 part of the challenge.
+- The secure-config and rollout plan for MVP 2 is the Session 2 part of the challenge:
+  [MVP2-Secure-Config-Rollout-Plan-Multitour.md](../MVP2-Secure-Config-Rollout-Plan-Multitour.md).
