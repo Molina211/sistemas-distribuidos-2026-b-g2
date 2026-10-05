@@ -1,0 +1,9 @@
+#!/bin/sh
+# Blocks the commit when the staged changes contain a secret.
+# Enable once per clone, from the repository root:
+#   git config core.hooksPath 09-week/hu-status/WeeklySummary/WeeklyChallenge/secure-config/githooks
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "pre-commit: gitleaks is not installed (winget install Gitleaks.Gitleaks); commit blocked" >&2
+  exit 1
+fi
+exec gitleaks git --pre-commit --staged --redact --no-banner
