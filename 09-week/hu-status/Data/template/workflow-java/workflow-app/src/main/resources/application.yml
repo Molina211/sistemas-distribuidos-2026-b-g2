@@ -1,0 +1,24 @@
+server:
+  port: ${PORT:8081}
+  shutdown: graceful
+  tomcat:
+    connection-timeout: 5s
+    keep-alive-timeout: 60s
+    threads:
+      max: 200
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+logging:
+  structured:
+    format:
+      console: ecs                        # one JSON object per line; the MDC adds correlationId
+workflow:
+  orders-api-url: ${ORDERS_API_URL:http://localhost:8080}
+  inventory-api-url: ${INVENTORY_API_URL:http://localhost:8082}
+  payments-api-url: ${PAYMENTS_API_URL:http://localhost:8083}
+  service-token: ${SERVICE_TOKEN:}        # issued by the identity service; never versioned
+  http:
+    timeout-seconds: ${HTTP_TIMEOUT_SECONDS:5}
+    attempts: ${HTTP_ATTEMPTS:3}
+    backoff-ms: ${HTTP_BACKOFF_MS:200}

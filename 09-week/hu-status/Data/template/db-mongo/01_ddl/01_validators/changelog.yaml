@@ -1,0 +1,9 @@
+# Evolving a validator is a new changeset with collMod — never an edit of
+# ddl-collections-001. Example kept commented until the domain needs it.
+databaseChangeLog: []
+#  - changeSet:
+#      id: ddl-validators-001
+#      author: <github-user>
+#      changes:
+#        - runCommand:
+#            command: '{ "collMod": "orders", "validator": { "$jsonSchema": { ... } } }'

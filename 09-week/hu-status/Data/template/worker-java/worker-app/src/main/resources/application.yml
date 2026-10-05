@@ -1,0 +1,15 @@
+worker:
+  orders-api-url: ${ORDERS_API_URL:http://localhost:8080}
+  service-token: ${SERVICE_TOKEN:}          # issued by the identity service; never versioned
+  expire-every-ms: ${EXPIRE_EVERY_MS:60000}
+  pending-ttl-minutes: ${PENDING_TTL_MINUTES:30}
+  batch-size: ${BATCH_SIZE:100}             # at most this many orders per run
+  run-timeout-seconds: ${RUN_TIMEOUT_SECONDS:50}
+  http:
+    timeout-seconds: ${HTTP_TIMEOUT_SECONDS:5}
+    attempts: ${HTTP_ATTEMPTS:3}
+    backoff-ms: ${HTTP_BACKOFF_MS:200}
+logging:
+  structured:
+    format:
+      console: ecs                          # one JSON object per line; the MDC adds correlationId

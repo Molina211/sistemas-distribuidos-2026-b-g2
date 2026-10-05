@@ -1,0 +1,10 @@
+# A tag marks the state of the schema at a release. `rollback <tag>` returns to it.
+databaseChangeLog:
+  - changeSet:
+      id: tcl-tag-1.0.0
+      author: <github-user>
+      labels: "release"
+      comment: "Baseline of the first release."
+      changes:
+        - tagDatabase:
+            tag: "1.0.0"

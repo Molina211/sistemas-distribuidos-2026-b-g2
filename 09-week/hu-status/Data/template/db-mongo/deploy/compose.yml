@@ -1,0 +1,41 @@
+name: abbr-orders-db
+
+services:
+  orders-db:
+    image: mongo:7
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    volumes:
+      - orders-db-data:/data/db
+    healthcheck:
+      # Initiates the single-node replica set on first start, then reports health.
+      test: ["CMD", "mongosh", "--quiet", "--eval",
+             "try { rs.status().ok } catch (e) { rs.initiate({_id:'rs0',members:[{_id:0,host:'orders-db:27017'}]}).ok }"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks: [platform]
+
+  orders-db-migrate:
+    build:
+      context: .
+      dockerfile: liquibase.Dockerfile
+    profiles: [tooling]
+    depends_on:
+      orders-db:
+        condition: service_healthy
+    volumes:
+      - ../:/workspace:ro
+    entrypoint: ["liquibase",
+      "--search-path=/workspace",
+      "--changelog-file=changelog/changelog-master.yaml",
+      "--url=mongodb://orders-db:27017/${ORDERS_DB_NAME:-orders}?replicaSet=rs0"]
+    command: ["update"]
+    networks: [platform]
+
+volumes:
+  orders-db-data:
+
+networks:
+  platform:
+    name: platform
+    external: true

@@ -1,0 +1,24 @@
+name: abbr-worker
+
+services:
+  worker:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    environment:
+      ORDERS_API_URL: http://orders-api:8080
+      # Issued by the identity service for this service; never versioned.
+      # <abbr>-infra/scripts/dev-keys.sh writes a development one into .env.
+      SERVICE_TOKEN: ${SERVICE_TOKEN:?run <abbr>-infra/scripts/dev-keys.sh}
+      EXPIRE_EVERY_MS: "60000"
+      PENDING_TTL_MINUTES: "30"
+      BATCH_SIZE: "100"
+      RUN_TIMEOUT_SECONDS: "50"
+      HTTP_TIMEOUT_SECONDS: "5"
+      HTTP_ATTEMPTS: "3"
+    networks: [platform]
+
+networks:
+  platform:
+    name: platform
+    external: true

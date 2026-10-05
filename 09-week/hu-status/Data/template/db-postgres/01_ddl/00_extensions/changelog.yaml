@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: ddl-extensions-001
+      author: <github-user>
+      labels: "HU-01,ddl,extensions"
+      comment: "Enable pgcrypto for gen_random_uuid()."
+      changes:
+        - sqlFile:
+            path: 001_enable_pgcrypto.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/00_extensions/001_enable_pgcrypto.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false

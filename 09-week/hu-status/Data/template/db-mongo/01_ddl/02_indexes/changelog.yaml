@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: ddl-indexes-001
+      author: <github-user>
+      labels: "HU-01,ddl,indexes"
+      comment: "Access paths of the API."
+      changes:
+        - createIndex:
+            collectionName: orders
+            keys: '{ "customerId": 1, "status": 1 }'
+            options: '{ "name": "idx_orders_customer_id_status" }'
+        - createIndex:
+            collectionName: orders
+            keys: '{ "status": 1, "createdAt": 1 }'
+            options: '{ "name": "idx_orders_status_created_at" }'
+      rollback:
+        - dropIndex:
+            collectionName: orders
+            keys: '{ "status": 1, "createdAt": 1 }'
+        - dropIndex:
+            collectionName: orders
+            keys: '{ "customerId": 1, "status": 1 }'

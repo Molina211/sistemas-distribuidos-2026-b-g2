@@ -1,0 +1,5 @@
+# Deliberately empty. Closed sets of values are modelled as a CHECK (see
+# customer_order.status) or as a lookup table (see sales_channel), not as an
+# ENUM type: adding a value to an enum cannot be done in the same transaction
+# that uses it. Composite or domain types, when genuinely needed, go here.
+databaseChangeLog: []

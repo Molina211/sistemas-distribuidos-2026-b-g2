@@ -1,0 +1,47 @@
+name: Database rebuild
+
+# The whole changelog must build the schema from an EMPTY database, every rollback
+# must work, and the chain must apply again afterwards. If the only place the
+# schema works is where it was patched by hand, the next environment cannot exist.
+
+on:
+  pull_request:
+    branches: [develop, qa, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: orders
+          POSTGRES_USER: orders_owner
+          POSTGRES_PASSWORD: ci-only
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U orders_owner -d orders"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply, roll everything back, apply again
+        run: |
+          lb() {
+            docker run --rm --network host -v "$PWD:/workspace:ro" liquibase/liquibase:4.29 \
+              --search-path=/workspace --changelog-file=changelog/changelog-master.yaml \
+              --url=jdbc:postgresql://localhost:5432/orders \
+              --username=orders_owner --password=ci-only "$@"
+          }
+          lb update
+          lb update | tee second.txt
+          grep -q "Run:  *0" second.txt || { echo "second update applied changes: not incremental"; exit 1; }
+          lb rollback-count 999
+          lb update

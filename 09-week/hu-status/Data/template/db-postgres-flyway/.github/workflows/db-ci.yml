@@ -1,0 +1,61 @@
+name: Database rebuild
+
+# The whole migration chain must build the schema from an EMPTY database, every
+# rollback script must undo it, and the chain must apply again afterwards. If the
+# only place the schema works is where it was patched by hand, the next
+# environment cannot exist.
+
+on:
+  pull_request:
+    branches: [develop, qa, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: orders
+          POSTGRES_USER: orders_owner
+          POSTGRES_PASSWORD: ci-only
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U orders_owner -d orders"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      PGPASSWORD: ci-only
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply, roll everything back, apply again
+        run: |
+          fw() {
+            docker run --rm --network host -v "$PWD:/workspace:ro" \
+              -e FLYWAY_URL=jdbc:postgresql://localhost:5432/orders \
+              -e FLYWAY_USER=orders_owner -e FLYWAY_PASSWORD=ci-only \
+              flyway/flyway:11.20 -workingDirectory=/workspace -configFiles=flyway.toml "$@"
+          }
+          sql() { psql -v ON_ERROR_STOP=1 -h localhost -U orders_owner -d orders "$@"; }
+
+          fw migrate
+          fw migrate | tee second.txt
+          grep -q "No migration necessary" second.txt || { echo "second migrate applied changes: not incremental"; exit 1; }
+
+          # Flyway Community does not undo. The rollback of each V<n> is U<n> in
+          # 05_rollbacks/, applied here from the highest version down.
+          for f in $(find 05_rollbacks -name 'U*.sql' | awk -F/ '{print $NF" "$0}' | sort -r | cut -d' ' -f2); do
+            echo "rollback $f"; sql -f "$f"
+          done
+          test "$(sql -tAc "select count(*) from pg_namespace where nspname = 'orders'")" = 0 \
+            || { echo "rollbacks left the schema behind"; exit 1; }
+
+          sql -c "drop table public.flyway_schema_history"
+          fw migrate

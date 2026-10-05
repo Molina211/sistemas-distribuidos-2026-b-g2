@@ -1,0 +1,14 @@
+name: abbr-front
+
+services:
+  front:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    expose: ["80"]
+    networks: [platform]
+
+networks:
+  platform:
+    name: platform
+    external: true

@@ -1,0 +1,24 @@
+name: abbr-workflow
+
+services:
+  workflow:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    environment:
+      PORT: "8081"
+      ORDERS_API_URL: http://orders-api:8080
+      INVENTORY_API_URL: http://inventory-api:8080
+      PAYMENTS_API_URL: http://payments-api:8080
+      # Public key of the identity service, one line with \n escapes.
+      JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY:?run <abbr>-infra/scripts/dev-keys.sh}
+      # Issued by the identity service for this service; never versioned.
+      # <abbr>-infra/scripts/dev-keys.sh writes a development one into .env.
+      SERVICE_TOKEN: ${SERVICE_TOKEN:?run <abbr>-infra/scripts/dev-keys.sh}
+    expose: ["8081"]
+    networks: [platform]
+
+networks:
+  platform:
+    name: platform
+    external: true

@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: ddl-schemas-001
+      author: <github-user>
+      labels: "HU-01,ddl,schemas"
+      comment: "Create the orders schema. Nothing of this domain lives in public."
+      changes:
+        - sqlFile:
+            path: 001_create_schema_orders.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/01_schemas/001_create_schema_orders.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false

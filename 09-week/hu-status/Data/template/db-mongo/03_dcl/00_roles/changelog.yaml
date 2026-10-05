@@ -1,0 +1,26 @@
+# Roles only. Login users and their passwords are created by the infrastructure
+# from secrets — never versioned here.
+databaseChangeLog:
+  - changeSet:
+      id: dcl-roles-001
+      author: <github-user>
+      labels: "HU-01,dcl,roles"
+      comment: "Reader and writer roles scoped to this database."
+      changes:
+        - runCommand:
+            command: >
+              { "createRole": "orders_reader",
+                "privileges": [ { "resource": { "db": "orders", "collection": "" },
+                                  "actions": ["find"] } ],
+                "roles": [] }
+        - runCommand:
+            command: >
+              { "createRole": "orders_writer",
+                "privileges": [ { "resource": { "db": "orders", "collection": "" },
+                                  "actions": ["find", "insert", "update"] } ],
+                "roles": [] }
+      rollback:
+        - runCommand:
+            command: '{ "dropRole": "orders_writer" }'
+        - runCommand:
+            command: '{ "dropRole": "orders_reader" }'

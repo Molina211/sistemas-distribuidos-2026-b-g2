@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: dml-inserts-001
+      author: <github-user>
+      labels: "HU-01,dml,seed"
+      comment: "Sales channel catalogue."
+      changes:
+        - createCollection:
+            collectionName: sales_channel
+        - insertMany:
+            collectionName: sales_channel
+            documents: |
+              [ { "_id": "WEB",    "description": "Web portal" },
+                { "_id": "MOBILE", "description": "Mobile application" },
+                { "_id": "STORE",  "description": "Physical store" } ]
+      rollback:
+        - dropCollection:
+            collectionName: sales_channel

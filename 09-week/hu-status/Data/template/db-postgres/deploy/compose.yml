@@ -1,0 +1,45 @@
+# This domain's own database instance and its migration runner.
+# Joins the shared `platform` network so that <abbr>-infra can compose it
+# together with the rest of the system.
+name: abbr-orders-db
+
+services:
+  orders-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${ORDERS_DB_NAME:-orders}
+      POSTGRES_USER: ${ORDERS_DB_USER:-orders_owner}
+      POSTGRES_PASSWORD: ${ORDERS_DB_PASSWORD:?set ORDERS_DB_PASSWORD}
+    volumes:
+      - orders-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${ORDERS_DB_USER:-orders_owner} -d ${ORDERS_DB_NAME:-orders}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks: [platform]
+
+  orders-db-migrate:
+    image: liquibase/liquibase:4.29
+    profiles: [tooling]
+    depends_on:
+      orders-db:
+        condition: service_healthy
+    volumes:
+      - ../:/workspace:ro
+    entrypoint: ["liquibase",
+      "--search-path=/workspace",
+      "--changelog-file=changelog/changelog-master.yaml",
+      "--url=jdbc:postgresql://orders-db:5432/${ORDERS_DB_NAME:-orders}",
+      "--username=${ORDERS_DB_USER:-orders_owner}",
+      "--password=${ORDERS_DB_PASSWORD:?set ORDERS_DB_PASSWORD}"]
+    command: ["update"]
+    networks: [platform]
+
+volumes:
+  orders-db-data:
+
+networks:
+  platform:
+    name: platform
+    external: true

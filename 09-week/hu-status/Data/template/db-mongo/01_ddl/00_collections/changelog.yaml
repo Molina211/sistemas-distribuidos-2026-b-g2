@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: ddl-collections-001
+      author: <github-user>
+      labels: "HU-01,ddl,collections"
+      comment: "Orders collection. Order lines are embedded, the customer is referenced by id."
+      changes:
+        - createCollection:
+            collectionName: orders
+            options: |
+              {
+                "validator": { "$jsonSchema": {
+                  "bsonType": "object",
+                  "required": ["_id", "customerId", "channel", "status", "totalCents", "items", "createdAt"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "_id":        { "bsonType": "string" },
+                    "customerId": { "bsonType": "string", "description": "owned by another domain: reference by id" },
+                    "channel":    { "enum": ["WEB", "MOBILE", "STORE"] },
+                    "status":     { "enum": ["PENDING", "CONFIRMED", "CANCELLED"] },
+                    "totalCents": { "bsonType": "long", "minimum": 1 },
+                    "items": { "bsonType": "array", "minItems": 1, "maxItems": 100, "items": {
+                      "bsonType": "object",
+                      "required": ["sku", "quantity", "unitPriceCents"],
+                      "additionalProperties": false,
+                      "properties": {
+                        "sku":            { "bsonType": "string" },
+                        "quantity":       { "bsonType": "int",  "minimum": 1 },
+                        "unitPriceCents": { "bsonType": "long", "minimum": 0 } } } },
+                    "createdAt": { "bsonType": "date" },
+                    "updatedAt": { "bsonType": "date" }
+                  } } },
+                "validationLevel": "strict",
+                "validationAction": "error"
+              }
+      rollback:
+        - dropCollection:
+            collectionName: orders
