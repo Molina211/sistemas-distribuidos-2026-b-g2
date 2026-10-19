@@ -71,7 +71,7 @@ for a connection (the Annex C limit is a pool of 10 with a 5 s wait).
 | `source` | `identity-audit`, `security` | 2 | allowed |
 
 Worst case, the gateway counter has 10 routes x 5 methods x 4 classes = 200 series, and the histogram of a
-service has 18 routes x 5 methods x 9 buckets = 810 series. Both are small.
+service has 14 routes x 5 methods x 9 buckets = 630 series. Both are small.
 
 **Forbidden labels.** They are unbounded, so they would multiply series without limit:
 - `tenant_id` and `tenant identifier`: one value per company, and the platform is meant to grow by companies.
