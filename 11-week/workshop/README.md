@@ -6,7 +6,7 @@
 - TEAM: ErrorCapa8
 - DOCS_REPO: https://github.com/code-corhuila/multi-tour-docs
 - REFLECTION_DOC: [PENDING: link of "W11 Reflection - Jhon Sebastian Molina Fierro", added when the document is created]
-- JOURNEY: [PENDING: written in CP1]
+- JOURNEY: A Platform Administrator inactivates a tenant and the TenantInactivated event reaches security (front, gateway, identity-audit-api, outbox, event relay, security). See 01-journey.md
 <!-- CONFIG-END -->
 
 Individual workshop of week 11 (delivery 1 in class, delivery 2 take-home). It applies observability to one
