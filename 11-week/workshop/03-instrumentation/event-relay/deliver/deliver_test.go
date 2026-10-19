@@ -54,7 +54,7 @@ func TestTheTraceIdReceivedIsTheTraceIdSent(t *testing.T) {
 	}
 }
 
-func TestARefusalAndATimeoutAreCountedWithTheirOutcome(t *testing.T) {
+func TestARefusalAndAnUnreachableConsumerAreCountedWithTheirOutcome(t *testing.T) {
 	var header http.Header
 	var server trace.Context
 	refusing := fakeSecurity(http.StatusServiceUnavailable, &header, &server)
