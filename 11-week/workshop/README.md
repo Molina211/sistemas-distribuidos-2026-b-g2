@@ -5,7 +5,7 @@
 - GITHUB_USER: Molina211
 - TEAM: ErrorCapa8
 - DOCS_REPO: https://github.com/code-corhuila/multi-tour-docs
-- REFLECTION_DOC: [PENDING: link of "W11 Reflection - Jhon Sebastian Molina Fierro", added when the document is created]
+- REFLECTION_DOC: https://docs.google.com/document/d/1RoRK_CF7u-JLvGfbYgE9dpKZtU5hSNhZPeknXTHsKeI/edit?usp=sharing
 - JOURNEY: A Platform Administrator inactivates a tenant and the TenantInactivated event reaches security (front, gateway, identity-audit-api, outbox, event relay, security). See 01-journey.md
 <!-- CONFIG-END -->
 
