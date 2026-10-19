@@ -5,33 +5,74 @@
 # Weekly Status - Week 11
 
 <!-- CONFIG-START - must match your profile repo (username/username) CONFIG -->
-- FULL_NAME:
-- GITHUB_USER:
-- TEAM:
-- SPRINT_GOAL:
+- FULL_NAME: Jhon Sebastian Molina Fierro
+- GITHUB_USER: Molina211
+- TEAM: ErrorCapa8
+- SPRINT_GOAL: Finish the second cut of Multitour: apply the tenant visual identity, rebuild the identity portal on the Mockup, add the first screens of the operations-cost portal, mount the portals in their own containers behind the gateway, promote the finished work of macrodomain 1 through `qa` and release 2.0.0 to `main` with the teacher's approval.
 <!-- CONFIG-END -->
 
 ## 1. User stories worked this week
+Rows are in chronological order of the work; dates are local time (UTC-5). The window is Monday 2026-10-12 08:40 (the cut of week 10) to Monday 2026-10-19 08:40; my last merged PR of the window is from 2026-10-15 08:22. Docs (`code-corhuila/multi-tour-docs`) only accepts changes through a branch and a pull request; the code repositories receive `feat/` branches into `develop` and are promoted to `qa` and `main` by re-application. Status is the real state of the pull requests on the day of writing; I did not re-check the board cards for this README.
+
 | HU ID | Title | Status (todo/doing/done) | Evidence (PR or commit URL) |
 |---|---|---|---|
-| HU-XXX-001 |  |  |  |
+| DEMO-01 | Fix the findings of the demo runs of macrodomain 1: publish the demo port on the gateway, record the evidence and debts of the demo | done | `multi-tour-infra-postgres` #12 (2026-10-12 13:30): https://github.com/code-corhuila/multi-tour-infra-postgres/pull/12 · Docs #359 (13:04): https://github.com/code-corhuila/multi-tour-docs/pull/359 |
+| HU-IDA-003 | Apply the visual identity of a tenant. Database: the identity in the collection validator. API: the value object and its rule, the route, the public profile field and the MongoDB storage. Portal: the identity screen and its entry in the staff panel. Front: apply the identity as accent variables and hand its changes to the portal. Specs and contract in Docs | done | `-db` #6: https://github.com/code-corhuila/multi-tour-identity-audit-db/pull/6 · `-api` #42 to #44: https://github.com/code-corhuila/multi-tour-identity-audit-api/pull/42 · portal #16, #17 · front #16, #17 (2026-10-13 09:51 to 14:13) · Docs #376 to #380 (2026-10-13 15:11): https://github.com/code-corhuila/multi-tour-docs/pull/376 |
+| FRT-02 | Front container, second iteration: welcome at the root with the company selector, general login with scope that navigates to the tenant login, then the operations-cost portal in the manifest, session permissions from the claim or the roles, and flags to hide the own sidebar of a portal inside the container | done | `multi-tour-front` #12, #14, #15, #20 (2026-10-12 11:32 to 2026-10-13 20:51), #30, #32 (2026-10-15 01:07 and 06:03), #36, #38 (2026-10-15 07:21 and 08:19): https://github.com/code-corhuila/multi-tour-front/pull/15 |
+| PRT-IDA-02 | Identity-audit portal rebuilt on the Mockup: staff and customer screens after sign-in, platform administrator shell, general scope, calque of the Mockup layout and transitions, sign-in without company field, sign-up sections, platform panel (summary, operators, create and detail, audit with detail dialog), staff frame (home, collaborators table with permissions, register, profile), Mockup texts of 2026-10-12, team table with filter and operator tokens, special permissions per user, optional roles and country and time zone settings, and its own container | done | `multi-tour-identity-audit-portal` #12 to #46 (2026-10-12 11:32 to 2026-10-15 06:46; 35 PRs): https://github.com/code-corhuila/multi-tour-identity-audit-portal/pull/25 · Docs specs #385 to #389, #432, #466: https://github.com/code-corhuila/multi-tour-docs/pull/385 |
+| PRT-OPS-01 | Operations-cost portal, first screens: container and operations page, register execution form and cost panel, per-departure execution page (panels by status, start, services, finish, novelties, regularization), departures list with filter, alerts and cancel panel, schedule-departure form with a single idempotency key per save attempt, side menu area read from the initial params | doing | `multi-tour-operations-cost-portal` #1 to #19 (2026-10-13 20:54 to 2026-10-15 07:23; 18 PRs): https://github.com/code-corhuila/multi-tour-operations-cost-portal/pull/5 · Docs specs #390 to #392, #433, #468 and the design contract #447, #448, #451: https://github.com/code-corhuila/multi-tour-docs/pull/433 · open: release 2.0.1 PR #17 |
+| GWY-02 | Gateway and root composition for the portals: route each portal module to its own container, route the cash-reporting portal, rewrite the module path of the commercial, cash and operations portals; include the portal containers in the root composition | done | `multi-tour-api-gateway` #5, #8, #11 (2026-10-13 20:57 to 2026-10-15 08:18): https://github.com/code-corhuila/multi-tour-api-gateway/pull/5 · `multi-tour-infra-postgres` #14 to #16, #19 (2026-10-13 20:56 to 2026-10-15 05:53): https://github.com/code-corhuila/multi-tour-infra-postgres/pull/14 |
+| REL-01 | Promote macrodomain 1 to `qa` and release 2.0.0 to `main`: re-application PRs to `qa` in the code repositories (2026-10-13 to 2026-10-15), then the `release/2.0.0` PRs to `main` in 13 repositories, approved by the teacher (for example `multi-tour-security` #34, review of `ariel5253` at 2026-10-14 17:52); tag `v2.0.0` exists in the repositories I checked (`security`, `front`, `identity-audit-api`) | done | https://github.com/code-corhuila/multi-tour-security/pull/34 · https://github.com/code-corhuila/multi-tour-front/pull/28 · https://github.com/code-corhuila/multi-tour-identity-audit-api/pull/46 (release PRs of 2026-10-14 17:52 to 18:11) · portal fixes promoted to `qa` after the release: portal #45, #46, operations-cost-portal #14 to #16, #19, front #33, #34, #37, #39, gateway #9, #12, infra-postgres #20 (2026-10-15) |
+| REL-02 | Release 2.0.1 of the portal-side repositories (portals, front, gateway, infra-postgres) with the post-release fixes | doing | Open PRs, not merged: `multi-tour-identity-audit-portal` #47, `multi-tour-operations-cost-portal` #17, `multi-tour-front` #35, `multi-tour-infra-postgres` #21, `multi-tour-api-gateway` #10 |
+| DOC-21 | Bring Docs in line with the built second cut: evidence and debts of the portals, tasks matched to the merged work, ADR-007 (extended mount contract and optional session permissions), overview, deployment, ADR index, service catalog with the real status of the 31 repositories, events and data ownership, traceability matrix with merged tests and PRs, backlog and glossary, signatures of the specs | done | Docs PRs #409, #431, #440, #441, #453 to #465, #467, #469 (2026-10-14 09:04 to 2026-10-15 06:57): https://github.com/code-corhuila/multi-tour-docs/pull/456 |
+| WCH-08 | Weekly Challenge week 11, Session 1: observability. Documents what the services log with a propagated correlation id (gateway, `security`, `identity-audit` API, the saga, the worker runtime, the front), the gaps (no metrics, no distributed trace, key `traceId` vs `correlationId`, no `tenantId` or actor in the lines) and the smallest change for each | done | [WeeklySummary/WeeklyChallenge/observability-logs-metrics-traces/](./WeeklySummary/WeeklyChallenge/observability-logs-metrics-traces/README.md): only the structured logs with a propagated id are implemented; metrics and the trace are not, and the tests it names were not re-run |
+| WCH-09 | Weekly Challenge week 11, Session 2: SLOs and alerting. Three SLOs (availability, latency, freshness) with windows, an error-budget policy, a burn-rate alert with owner and runbook, a runbook for stuck outbox events and seven observability stories with acceptance criteria | doing | [WeeklySummary/WeeklyChallenge/SLO-Alerting-Runbook-Multitour.md](./WeeklySummary/WeeklyChallenge/SLO-Alerting-Runbook-Multitour.md): a plan; nothing is measured or alerting, the freshness SLO and the thresholds are proposals not approved by the team, and the runbook was not rehearsed |
 
 ## 2. My individual contribution
--
+Chronological, local time (UTC-5). In the window I merged 148 PRs under my account: 40 in Docs and 108 in 13 code repositories. Most code PRs target `develop`; the `chore(...)` PRs titled "promote" re-apply finished work to `qa` and the `chore(release)` ones target `main`.
+- **2026-10-12 (from 08:40).** Showed the company on the landing and aligned the guard in the front (#12), staff and customer screens after sign-in and the platform administrator shell in the portal (#12, #13), the welcome at the root with the company selector (#14), the demo port on the gateway (`infra-postgres` #12) and the evidence and debts of the demo in Docs (#359).
+- **2026-10-13.** General login with scope and navigation (front #15, #20; portal #14), then the tenant visual identity in the five pieces (db #6, api #42 to #44, portal #16, #17, front #16, #17) with its five Docs specs (#376 to #380). Re-applied the finished work to `qa` in the gateway, runtime, Mongo instance, front, relay and root composition (#4, #4, #3, #18, #5, #13). Wrote the portal specs of the identity views and of the operations-cost start and end of a departure, executions and costs screens (Docs #385 to #392). In the evening, the identity portal on the Mockup: layout and transitions, platform panel, staff frame and views (portal #18 to #33), and the first operations-cost portal screens (#1, #2). The portals got their own containers, routed by the gateway and included in the root composition (portal #33, gateway #5, infra-postgres #14, #15).
+- **2026-10-14.** Wired the collaborators, detail, register and profile into the staff frame (portal #35 to #37, #39), the departure execution page of the operations-cost portal (#5 to #8) and its Docs specs and evidence (#433, #440). Re-applied to `qa` the portals, API, db, front, workflow, security, gateway and root composition (#38, #45, #7, #21, #9, #33, #4, #6, #17). Updated Docs to the built state (#441 to #465), signed the specs, and opened and merged the 13 `release/2.0.0` PRs to `main` (17:52 to 18:11), approved by the teacher.
+- **2026-10-15 (until 08:22).** Operations-cost portal departures list and schedule form (#11 to #13), session permissions in the front (#32), team table, special permissions, optional roles and region in the identity portal (#42 to #44), cash-reporting route and composition (gateway #8, infra-postgres #19), module path rewrite and sidebar fixes found by running the container (gateway #11, front #36, #38, operations-cost-portal #18), their promotion to `qa`, and the evidence in Docs (#467 to #469). Opened the 2.0.1 release PRs, still open.
+- **Weekly Challenge.** Session 1: read the code of the gateway, `security`, `identity-audit`, the saga, the worker runtime and the front, and documented the structured logs and the correlation id that exist, with the test that backs each, and the missing metrics and trace. Session 2: SLOs, error-budget policy, burn-rate alert with owner, a runbook for stuck events and the observability stories. Both are documents; no code was changed.
+- **Not mine, so not counted:** the PRs of teammates in `commercial-reservation`, `cash-reporting` and the other repositories this week, and the teacher's release material.
 
 ## 3. Blockers and risks
--
+- **Release 2.0.1 is not merged.** Five release PRs (`identity-audit-portal` #47, `operations-cost-portal` #17, `front` #35, `infra-postgres` #21, `api-gateway` #10) are open, so the fixes of 2026-10-15 are in `qa` but not in `main`. I did not check whether the tag `v2.0.0` exists in every one of the 13 repositories, only in three.
+- **The cash-reporting portal has one PR of mine (the release).** Its screens and the operations-cost ones beyond the departures are not built; the operations-cost API and db have no code, so its portal works against the design contract, not against a real service. [PENDIENTE: confirm with the board which stories of `operations-cost` and `cash-reporting` stay in the demo.]
+- **Little review time.** Many PRs were merged minutes after opening (for example the 13 release PRs, all merged between 17:52 and 18:11 on 2026-10-14), which leaves little room for review.
+- **No code work after 2026-10-15 08:22 in this window.** The two Weekly Challenge documents of week 11 were written afterwards and describe a plan: no metrics, trace or alert exists in the services, and the observability stack of ADR-004 D8 is not built.
+- **Board not re-checked** for this README; the statuses above come from the state of the pull requests.
 
 ## 4. Plan for next week
--
+In order of dependency.
+- Merge the five 2.0.1 release PRs with the teacher's approval and check the tag in all the released repositories.
+- Close the observability gaps in the order of the challenge: one log key and `tenantId`/actor in every line, gateway metrics, a `/health` probe and the age of the oldest outbox event, then the first alert and a trace of the onboarding saga; get the team's approval of the SLO targets first.
+- Run the demo of macrodomain 1 against the real containers with the released versions and record the result in Docs.
+- Close the open criteria of the portal stories (identity-audit, operations-cost) and move their cards.
+- Start the `operations-cost` API and db that the portal already consumes through the design contract, with the spec first.
+- Pay the declared debts listed in the Docs evidence PRs (#359, #409, #469).
 
 ## 5. Compliance self-check
-- [ ] Conventional Commits - `type(scope): summary`
-- [ ] Per-environment HU branch + PR to that environment (hu-xxx-dev -> develop, ...)
-- [ ] Testable acceptance criteria
-- [ ] Tests added/updated (unit / integration)
-- [ ] DDD / hexagonal boundaries respected (domain has no I/O)
-- [ ] No secrets; config via environment variables
+- [x] Conventional Commits - `type(scope): summary` - the titles of the PRs of this week follow it (`feat(portal)`, `fix(compose)`, `chore(release)`, `docs(07-api)`)
+- [x] Per-environment HU branch + PR to that environment (hu-xxx-dev -> develop, ...) - code PRs go to `develop`, the "promote" PRs to `qa` and `release/2.0.0` to `main` with the teacher's review (`multi-tour-security` #34); Docs changes go by branch and PR into `main`
+- [x] Testable acceptance criteria - the specs of each piece carry criteria and a "Tests" section (Docs #376 to #380, #385 to #392, #433, #468)
+- [x] Tests added/updated (unit / integration) - the portal and API feature PRs carry their tests (for example `identity-audit-portal` #28 drops an unused test constant, `operations-cost-portal` #13 fixes the idempotency key of the schedule form); I did not re-run the suites for this README
+- [x] DDD / hexagonal boundaries respected (domain has no I/O) - the tenant visual identity is a value object in the `core` module of `identity-audit-api` (#42) and its storage is an adapter (#44)
+- [x] No secrets; config via environment variables - the portals and the composition read configuration from the environment (`infra-postgres` #14 to #16, #19)
 
 ## 6. Evidence links
--
+- Class summary image for week 11: [WeeklySummary/Week-11.png](./WeeklySummary/Week-11.png)
+- Release delivery archive of the second cut (12 `v2.0.0` zip files, one per repository): [Data/Document/ENTREGA-RELEASE-C2.rar](./Data/Document/ENTREGA-RELEASE-C2.rar)
+- Weekly Challenge week 11, Session 1 writeup: [WeeklySummary/WeeklyChallenge/observability-logs-metrics-traces/](./WeeklySummary/WeeklyChallenge/observability-logs-metrics-traces/README.md)
+- Weekly Challenge week 11, Session 2 SLOs, alert and runbook: [WeeklySummary/WeeklyChallenge/SLO-Alerting-Runbook-Multitour.md](./WeeklySummary/WeeklyChallenge/SLO-Alerting-Runbook-Multitour.md)
+- Release PR of `multi-tour-security` approved by the teacher (2026-10-14 17:52): https://github.com/code-corhuila/multi-tour-security/pull/34
+- Release PR of `multi-tour-front`: https://github.com/code-corhuila/multi-tour-front/pull/28
+- Tenant visual identity, API: https://github.com/code-corhuila/multi-tour-identity-audit-api/pull/43
+- Identity portal PRs #12 to #46: https://github.com/code-corhuila/multi-tour-identity-audit-portal/pulls?q=is%3Apr+is%3Amerged
+- Operations-cost portal PRs #1 to #19: https://github.com/code-corhuila/multi-tour-operations-cost-portal/pulls?q=is%3Apr+is%3Amerged
+- Front PRs #12 to #39: https://github.com/code-corhuila/multi-tour-front/pulls?q=is%3Apr+is%3Amerged
+- Gateway routes of the portals: https://github.com/code-corhuila/multi-tour-api-gateway/pull/5
+- Root composition with the portals: https://github.com/code-corhuila/multi-tour-infra-postgres/pull/14
+- Docs PR #456 (traceability matrix with the merged tests and PRs): https://github.com/code-corhuila/multi-tour-docs/pull/456
+- Docs PR #469 (evidence of the portal, gateway and composition PRs): https://github.com/code-corhuila/multi-tour-docs/pull/469
