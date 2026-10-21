@@ -1,0 +1,100 @@
+# CP7 - Burn-rate alerts for the delivery SLOs of 05-slo.md (target 99 %, error budget 1 %).
+# Prometheus alerting rules. Metrics of 04-metrics.md: the relay metrics are built in 03-instrumentation/,
+# not yet in the real relay, so nothing here is loaded in a Prometheus today.
+#
+# Burn rate = observed error ratio / budget ratio. With a budget of 1 %:
+#   burn rate 14.4 -> error ratio above 14.4 % ; burn rate 6 -> error ratio above 6 %.
+# Every rule needs two windows: the long one says the budget is really being spent, the short one says it
+# is still being spent now (the alert clears quickly after the fix).
+# Every rule also needs at least 10 attempts in its long window: Multitour has about 29 events a day, so a
+# single failed attempt in a quiet hour would be a ratio of 50 % and would page for nothing. A quiet-hour
+# outage is the job of the freshness SLO (SLO 3), which is time-based.
+
+groups:
+  - name: tenant-event-delivery-availability
+    rules:
+      - alert: TenantEventDeliveryFastBurn
+        expr: |
+          (
+            sum(rate(relay_deliveries_total{consumer="security",outcome!="ok"}[1h]))
+            / sum(rate(relay_deliveries_total{consumer="security"}[1h]))
+          ) > (14.4 * 0.01)
+          and
+          (
+            sum(rate(relay_deliveries_total{consumer="security",outcome!="ok"}[5m]))
+            / sum(rate(relay_deliveries_total{consumer="security"}[5m]))
+          ) > (14.4 * 0.01)
+          and
+          sum(increase(relay_deliveries_total{consumer="security"}[1h])) >= 10
+        labels:
+          severity: page
+          team: errorcapa8-security
+          slo: tenant-event-delivery-availability
+        annotations:
+          summary: "Events of identity-audit are not reaching security: 2 % of the 30-day budget spent in one hour"
+          runbook_url: https://github.com/Molina211/sistemas-distribuidos-2026-b-g2/blob/main/11-week/workshop/07-runbook.md
+
+      - alert: TenantEventDeliverySlowBurn
+        expr: |
+          (
+            sum(rate(relay_deliveries_total{consumer="security",outcome!="ok"}[6h]))
+            / sum(rate(relay_deliveries_total{consumer="security"}[6h]))
+          ) > (6 * 0.01)
+          and
+          (
+            sum(rate(relay_deliveries_total{consumer="security",outcome!="ok"}[30m]))
+            / sum(rate(relay_deliveries_total{consumer="security"}[30m]))
+          ) > (6 * 0.01)
+          and
+          sum(increase(relay_deliveries_total{consumer="security"}[6h])) >= 10
+        labels:
+          severity: ticket
+          team: errorcapa8-security
+          slo: tenant-event-delivery-availability
+        annotations:
+          summary: "Deliveries to security keep failing at a low rate: 5 % of the 30-day budget spent in six hours"
+          runbook_url: https://github.com/Molina211/sistemas-distribuidos-2026-b-g2/blob/main/11-week/workshop/07-runbook.md
+
+  - name: tenant-event-delivery-latency
+    rules:
+      - alert: TenantEventDeliveryLatencyFastBurn
+        expr: |
+          (
+            1 - sum(rate(relay_delivery_duration_seconds_bucket{consumer="security",le="1"}[1h]))
+              / sum(rate(relay_delivery_duration_seconds_count{consumer="security"}[1h]))
+          ) > (14.4 * 0.01)
+          and
+          (
+            1 - sum(rate(relay_delivery_duration_seconds_bucket{consumer="security",le="1"}[5m]))
+              / sum(rate(relay_delivery_duration_seconds_count{consumer="security"}[5m]))
+          ) > (14.4 * 0.01)
+          and
+          sum(increase(relay_delivery_duration_seconds_count{consumer="security"}[1h])) >= 10
+        labels:
+          severity: page
+          team: errorcapa8-security
+          slo: tenant-event-delivery-latency
+        annotations:
+          summary: "Deliveries to security are slow (over 1 s): 2 % of the 30-day budget spent in one hour"
+          runbook_url: https://github.com/Molina211/sistemas-distribuidos-2026-b-g2/blob/main/11-week/workshop/07-runbook.md
+
+      - alert: TenantEventDeliveryLatencySlowBurn
+        expr: |
+          (
+            1 - sum(rate(relay_delivery_duration_seconds_bucket{consumer="security",le="1"}[6h]))
+              / sum(rate(relay_delivery_duration_seconds_count{consumer="security"}[6h]))
+          ) > (6 * 0.01)
+          and
+          (
+            1 - sum(rate(relay_delivery_duration_seconds_bucket{consumer="security",le="1"}[30m]))
+              / sum(rate(relay_delivery_duration_seconds_count{consumer="security"}[30m]))
+          ) > (6 * 0.01)
+          and
+          sum(increase(relay_delivery_duration_seconds_count{consumer="security"}[6h])) >= 10
+        labels:
+          severity: ticket
+          team: errorcapa8-security
+          slo: tenant-event-delivery-latency
+        annotations:
+          summary: "Deliveries to security are slowly getting slower: 5 % of the 30-day budget spent in six hours"
+          runbook_url: https://github.com/Molina211/sistemas-distribuidos-2026-b-g2/blob/main/11-week/workshop/07-runbook.md
