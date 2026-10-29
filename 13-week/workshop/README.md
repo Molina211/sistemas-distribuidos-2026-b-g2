@@ -8,8 +8,8 @@
 - BOUNDARY: multi-tour-api-gateway to multi-tour-security
 - CLAIM_ISSUE: https://github.com/code-corhuila/multi-tour-docs/issues/578
 - REFLECTION_DOC: https://docs.google.com/document/d/1g4i80Jk1ZaW2L9TCK02F_A7evg5EhbqkSlB3gKfxTes/edit?usp=sharing
-- LIBRARY_BOOK: pending
-- LIBRARY_RECORD_TIME: pending
+- LIBRARY_BOOK: Ramos Varón, A., Barbero Muñoz, C. A., Martínez Sánchez, R., García Moreno, Á. and González Nava, J. M., Hacking y seguridad de páginas web, 1st edition, 2015, call number 005.8 R175h Ej.1
+- LIBRARY_RECORD_TIME: 2026-10-29 09:04
 <!-- CONFIG-END -->
 
 Individual workshop of week 13 (progress delivery in class, final delivery take-home). It threat-models one trust
