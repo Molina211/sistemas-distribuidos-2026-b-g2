@@ -1,0 +1,63 @@
+# Security gates for the boundary multi-tour-api-gateway -> multi-tour-security (week 13 workshop, CP4).
+# Three jobs: secrets in the history (gitleaks), known vulnerabilities in the Go dependencies (govulncheck)
+# and the negative authorization test of story #584 (STRIDE row E).
+# workflow_dispatch lets me run it by hand while the organization's Actions are locked by billing.
+name: security
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  secrets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  vulnerabilities:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: code-corhuila/multi-tour-security
+          ref: develop
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: govulncheck
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@v1.1.4
+          govulncheck ./...
+
+  authorization:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: code-corhuila/multi-tour-security
+          ref: develop
+          path: security
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: security/go.mod
+      - name: add the negative test to the service package
+        run: cp 13-week/workshop/04-security-ci/authorization_negative_test.go security/internal/adapter/http/
+      - name: negative authorization test
+        working-directory: security
+        run: go test -run TestW13 -v ./internal/adapter/http/
