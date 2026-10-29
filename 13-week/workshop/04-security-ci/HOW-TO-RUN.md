@@ -29,4 +29,15 @@ Actions are locked by billing and my fork has its own.
 
 ## Result
 
-Filled in after the first real run.
+First manual run (`workflow_dispatch` on `main`): https://github.com/Molina211/sistemas-distribuidos-2026-b-g2/actions/runs/40943113682
+
+| Job | Result |
+|---|---|
+| `secrets` (gitleaks) | success, no leaks |
+| `authorization` (negative test) | success, `TestW13_ATokenOfTenantACannotCreateAnAdministratorInTenantB` passes |
+| `vulnerabilities` (govulncheck) | **failure**, a real finding |
+
+`govulncheck` found 3 vulnerabilities that the code of `multi-tour-security` calls: GO-2026-6629 and GO-2026-5970 in
+`golang.org/x/text@v0.24.0` (fixed in v0.41.0 and v0.39.0) and GO-2026-5004 in `github.com/jackc/pgx/v5@v5.7.6`
+(SQL injection through dollar-quoted strings, fixed in v5.9.2; reached from `postgres.Accounts.RolesOf`). The gate did its job.
+Raising those two dependencies belongs to the owner of `multi-tour-security` and is not done in this workshop.
