@@ -41,3 +41,30 @@ First manual run (`workflow_dispatch` on `main`): https://github.com/Molina211/s
 `golang.org/x/text@v0.24.0` (fixed in v0.41.0 and v0.39.0) and GO-2026-5004 in `github.com/jackc/pgx/v5@v5.7.6`
 (SQL injection through dollar-quoted strings, fixed in v5.9.2; reached from `postgres.Accounts.RolesOf`). The gate did its job.
 Raising those two dependencies belongs to the owner of `multi-tour-security` and is not done in this workshop.
+
+## CP8 - Run on my machine (2026-10-30 20:53)
+
+Service `multi-tour-security`, `develop` at `d0e0f5c`, in a temporary copy (the real repository was not touched). The test file was
+copied into `internal/adapter/http/` and run with Go 1.27.0 on Windows:
+
+```text
+$ go test -run TestW13 -v ./internal/adapter/http/
+=== RUN   TestW13_ATokenOfTenantACannotCreateAnAdministratorInTenantB
+--- PASS: TestW13_ATokenOfTenantACannotCreateAnAdministratorInTenantB (0.11s)
+PASS
+ok  	github.com/code-corhuila/multi-tour-security/internal/adapter/http	0.347s
+```
+
+The same test passed in the Actions run above, so local and CI agree.
+
+### Workflow validation
+
+`security.yml` was parsed with PyYAML: it loads without errors, the triggers are `pull_request` and `workflow_dispatch`, and the
+jobs are `secrets`, `vulnerabilities` and `authorization`. The copy in `.github/workflows/security.yml` is identical (`cmp`).
+This checks the syntax only. I did not run `actionlint`, so the expressions of Actions are checked only by the real run that
+already executed the three jobs.
+
+### What this does not show
+
+The test has never been seen failing: I did not remove the protection of the route to check that the test detects it, so it
+proves the current behaviour but not that it would catch a regression.
