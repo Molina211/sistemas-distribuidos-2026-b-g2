@@ -1,0 +1,22 @@
+# Week 14 challenge: the pipeline of the booking service runs only when its own folder changes (path filter).
+name: w14-booking
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "14-week/challenge/services/booking/**"
+  workflow_dispatch:
+
+concurrency:
+  group: w14-booking-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  gates:
+    uses: ./.github/workflows/w14-go-gates.yml
+    with:
+      dir: 14-week/challenge/services/booking

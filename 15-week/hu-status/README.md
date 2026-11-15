@@ -5,33 +5,82 @@
 # Weekly Status - Week 15
 
 <!-- CONFIG-START - must match your profile repo (username/username) CONFIG -->
-- FULL_NAME:
-- GITHUB_USER:
-- TEAM:
-- SPRINT_GOAL:
+- FULL_NAME: Jhon Sebastian Molina Fierro
+- GITHUB_USER: Molina211
+- TEAM: ErrorCapa8
+- SPRINT_GOAL: Close the remaining stories of security, identity-audit and operations-cost with their workers and sagas, promote every finished story to `qa` with `git cherry-pick -x`, and prepare the MVP 3 release (backups, rollback and the operability checklist) for the professor to approve on `main`.
 <!-- CONFIG-END -->
 
 ## 1. User stories worked this week
+Rows are in chronological order of the work; dates are local time (UTC-5). The window starts on Monday 2026-11-09 08:40 (the cut of week 14) and this README describes the state on Saturday 2026-11-14 in the evening, before the end of the week. In that window I opened 408 pull requests in `code-corhuila`: 405 merged and 3 still open (`gh search prs --author Molina211 --owner code-corhuila --created 2026-11-09..2026-11-15`, filtered by the hour). 147 of them are promotions to `qa`. The status column is the board (`code-corhuila/projects/28`) on the day of writing: `In Review` means my side is finished and a criterion waits on a service of my teammate, so I write it as `doing`.
+
 | HU ID | Title | Status (todo/doing/done) | Evidence (PR or commit URL) |
 |---|---|---|---|
-| HU-XXX-001 |  |  |  |
+| HU-SEC-008 | Give the internal role to a final customer account (`code-corhuila/multi-tour-docs#687`): the side of a session, sign in and renew from the side the person chose, give the internal role, switch off only the team side, the side asked at sign-in in the portal; evidence and pillar review | done | `multi-tour-security` #95 to #99 and #101 (2026-11-09 08:36 to 09:53), `multi-tour-identity-audit-portal` #75 · Docs #831, #836, #844: https://github.com/code-corhuila/multi-tour-docs/pull/844 |
+| HU-WRK-004 | Send business e-mail (`#204`): the notifications worker started from an empty repository, the password reset notice to the administrators, routes that check the service token, SMTP, no e-mail address in the log; later the emergency access notice and the failed reset notice | done | `multi-tour-worker-notifications` #1 to #7 and #15 (2026-11-09 08:57 to 2026-11-12 14:20), security #100, relay #23, infra #30 · Docs #835, #838, #839, #846: https://github.com/code-corhuila/multi-tour-docs/pull/846 |
+| HU-OPS-004 | Record the delivered and the undelivered services (`#190`): what each reservation of a departure received, saved while the departure runs, the travelers served and the no-show, the reservations read from commercial-reservation | doing | `multi-tour-operations-cost-db` #11, `multi-tour-operations-cost-api` #40 to #43 and #50, `multi-tour-operations-cost-portal` #45, #46 (2026-11-09 08:49 to 2026-11-10 22:44) · Docs #863, #901: https://github.com/code-corhuila/multi-tour-docs/pull/901 · In Review: waits on commercial-reservation |
+| HU-SEC-007 | Exceptional and emergency access of the platform administrator (`#164`): ask for a support access, list and decide the requests of a tenant, the token of a support access with its scope, close it and expire the approved ones; the emergency access with its own mark and a notice per active administrator when it opens and closes; every service refuses or records the use of the exceptional token | done | security #102 to #120 (2026-11-09 10:16 to 2026-11-10 13:57), identity-audit-api #68, #69, operations-cost-api #49, #51, relay #24 to #28 · Docs #847, #864, #865, #869, #871 to #886, #894, #904: https://github.com/code-corhuila/multi-tour-docs/pull/886 |
+| HU-OPS-007 | Record operational costs (`#193`): the cost table, a cost as a value object, record and read the costs of a departure, the cost parametrized by the catalog, the panel; a gap found in the money format of the panel | done | operations-cost-db #12, api #44 to #48, portal #47, #48 (2026-11-09 17:48 to 2026-11-10 02:58) · Docs #866 to #868, #875: https://github.com/code-corhuila/multi-tour-docs/pull/875 |
+| HU-OPS-002 | Assign and change the vehicles of a departure (`#188`), part B: the saga `change-departure-vehicles` started from an empty repository (schema, steps with compensation, state in PostgreSQL, service token, resumption loop), the preview and the replacement of the set of vehicles, a gateway timeout of 150 s for the saga, and the screen that starts the change | doing | `multi-tour-workflow-change-departure-vehicles` #1 to #10 (2026-11-09 18:10 to 2026-11-10 22:55), operations-cost-api #52 to #55, db #13, portal #75, infra #31, gateway #15 · Docs #870, #873, #898, #903, #919: https://github.com/code-corhuila/multi-tour-docs/pull/919 |
+| HU-OPS-006 | Cancel a departure and handle its reservations (`#192`): the saga `cancel-departure` started from an empty repository (skeleton, contract of three routes, state, steps, service token, budget for its start, only the listed services may start it), the cancellation and the "not carried out" regularization in operations-cost, the panel; job 3 starts the saga for the due departures of an inactive tenant | doing | `multi-tour-workflow-cancel-departure` #2 to #12 (2026-11-11 11:16 to 2026-11-12 14:05), operations-cost-db #16, api #60 to #63 and #115, portal #53 to #55, `multi-tour-worker-departure-deadlines` #6, #7, infra #39, #48 · Docs #902, #905, #912, #920, #921, #961 to #964, #1004, #1063: https://github.com/code-corhuila/multi-tour-docs/pull/921 |
+| HU-IDA-004 | Change the time zone and the country of the tenant (`#166`): forward only, by its own route, the previous values in the event, the route that reads the localization of the token, the screen and the card of the staff panel; the change routed to commercial-reservation | doing | `multi-tour-identity-audit-api` #70 to #74, portal #76 to #79, relay #33, #35 (2026-11-11 19:03 to 2026-11-12 13:03) · Docs #922, #923, #927, #940, #946, #951: https://github.com/code-corhuila/multi-tour-docs/pull/951 · In Review |
+| HU-OPS-005 | Block ordinary adjustments and record an extraordinary cancellation (`#191`): table, domain, persistence, route and form | doing | operations-cost-db #14, api #56 to #58, portal #49 to #51 (2026-11-12 04:17 to 13:36) · Docs #943 to #945, #957: https://github.com/code-corhuila/multi-tour-docs/pull/957 · In Review |
+| HU-WRK-007 / HU-IDA-002 | Relay events between domains (`#203`) and the audit (`#163`): routes to cash-reporting, the cancellation, cost and extraordinary cancellation events, a test that a `4xx` of a consumer is one attempt per run, the cash and operations events recorded with their own actor, the failed reset in the audit filter, the revocation of the sessions sent to the services that keep a cutoff, the deliveries that can only fail stopped | doing | relay #39 to #41, #43, #44, #48, identity-audit-api #75, #76, #99, #100 (2026-11-12 13:26 to 2026-11-14 20:16) · Docs #953, #954, #959, #960, #966, #1007, #1010, #1031, #1066: https://github.com/code-corhuila/multi-tour-docs/pull/1010 |
+| HU-WRK-006 | Apply data retention (`#215`): the retention worker sweeps the active and inactive tenants read from identity-audit, run on dev with an inactive tenant | doing | `multi-tour-worker-retention` #6 (2026-11-12 18:30), identity-audit-api #77 · Docs #958, #970, #976, #983: https://github.com/code-corhuila/multi-tour-docs/pull/983 · In Review |
+| HU-OPS-008 | Record a personal emergency during a departure (`#194`): table, domain, persistence, the novelties route and the panel of the reservations | doing | operations-cost-db #18, api #65 to #68, portal #57 to #59 (2026-11-12 22:09 to 2026-11-13 00:27) · Docs #981, #984: https://github.com/code-corhuila/multi-tour-docs/pull/984 · In Review |
+| HU-IDA-005 | Maintain the tenant's logo and commercial images (`#683`): stored in MongoDB, save and remove, served to anyone with the link of the tenant, the gateway lets them through and keeps the public files cacheable, the screen of the portal, the container keeps and refreshes them | done | identity-audit-api #79 to #81, portal #80 to #83, `multi-tour-api-gateway` #18, `multi-tour-front` #70 to #72 (2026-11-12 22:14 to 2026-11-13 03:25) · Docs #977, #985, #987, #1005, #1006: https://github.com/code-corhuila/multi-tour-docs/pull/1006 |
+| Promotion to `qa` | Every finished story of my repositories promoted to `qa`, one `chore/promote-<HU>` branch per story and one `git cherry-pick -x` per commit that exists in `develop`, split in parts when a story passes 400 visible lines: 41 PRs in operations-cost-api, 38 in security, 17 in identity-audit-api, 17 in identity-audit-portal, 13 in operations-cost-portal, 11 in operations-cost-db, and the rest in the relay, the db of identity-audit, retention, notifications, the front and the gateway | done | 147 PRs from 2026-11-13 13:12 to 2026-11-14 16:01, for example https://github.com/code-corhuila/multi-tour-security/pull/158 and https://github.com/code-corhuila/multi-tour-operations-cost-api/pull/105 |
+| HU-SEC-005 / HU-SEC-006 / HU-IDA-004 | The operations-cost side of three stories: the session cutoff of an account and the revocation of the sessions, the older tokens refused (`#161`, `#162`), and the time zone of each departure (`#166`) | doing | operations-cost-db #29, api #107 to #110, portal #72, #73, relay #48 (2026-11-14 03:21 to 15:17) · Docs #1027, #1028, #1032: https://github.com/code-corhuila/multi-tour-docs/pull/1032 |
+| HU-INF-001 | Run the single PostgreSQL instance and the root composition (`#199`), release preparation: a test that every migration runner applies and a second run applies nothing, back up and restore the platform and back up before migrating, the MongoDB backup and restore with the oplog, the worker runtime pinned at `v0.1.0` in four workers | doing | `multi-tour-infra-postgres` #46, #47 (2026-11-14 17:57 and 18:50), `multi-tour-infra-mongo` #5, relay #50, notifications #17, departure-deadlines #5, retention #8 · Docs #1036, #1040, #1041: https://github.com/code-corhuila/multi-tour-docs/pull/1040 |
+| Release to `main` | Keep the development key and token scripts out of `main` (open), and align the architecture state and ADR-004 with the code (open). The release `release/3.0.0` and the tag `v3.0.0` are not done | todo | https://github.com/code-corhuila/multi-tour-infra-postgres/pull/45 · https://github.com/code-corhuila/multi-tour-docs/pull/1067 · https://github.com/code-corhuila/multi-tour-docs/pull/1068 |
 
 ## 2. My individual contribution
--
+Chronological, local time (UTC-5), from Monday 2026-11-09 08:40 to Saturday 2026-11-14 in the evening. 408 pull requests under my account: 87 in Docs, 75 in `multi-tour-operations-cost-api`, 63 in `multi-tour-security`, 32 in `multi-tour-operations-cost-portal`, 32 in `multi-tour-identity-audit-api`, 26 in `multi-tour-identity-audit-portal`, 19 in `multi-tour-operations-cost-db`, 18 in `multi-tour-worker-event-relay`, 11 in `multi-tour-workflow-cancel-departure`, 10 in `multi-tour-workflow-change-departure-vehicles`, 10 in `multi-tour-worker-notifications`, 8 in `multi-tour-infra-postgres`, 4 in `multi-tour-front`, 3 each in the retention worker, job 3, the db of identity-audit and the gateway, and 1 in `multi-tour-infra-mongo`.
+- **2026-11-09, morning.** Closed HU-SEC-008 and built the notifications worker of HU-WRK-004 from an empty repository.
+- **2026-11-09 to 2026-11-10.** Built HU-SEC-007, support and emergency access, in `security` (19 PRs) with its audit and notices, and HU-OPS-004 and HU-OPS-007 in operations-cost.
+- **2026-11-09 to 2026-11-10.** Built the saga `change-departure-vehicles` from an empty repository (part B of HU-OPS-002).
+- **2026-11-11.** Built the saga `cancel-departure` from an empty repository, and the exceptional token in the other services.
+- **2026-11-11 to 2026-11-12.** Built HU-IDA-004 and HU-OPS-005, the cancellation of a departure (HU-OPS-006), the relay routes to cash-reporting and the retention sweep.
+- **2026-11-12, night.** Built HU-OPS-008 and HU-IDA-005 with the gateway and the container.
+- **2026-11-13 to 2026-11-14.** Promoted every finished story to `qa` in 147 PRs, with `git cherry-pick -x`.
+- **2026-11-14.** Added the time zone and the session cutoff to operations-cost, connected job 3 to the saga, the backup and restore of both engines and the check of every migration runner, and signed the six specs of sagas and workers my teammate asked of me as Project Lead (Docs #1036).
+- **Weekly challenges, 2026-11-14 20:36 and 20:37.** Ran a load test with k6 (40 r/s for 1 minute through the gateway, SLO p95 < 300 ms met with 9.69 ms and 0 % failed) and a chaos experiment (stopping the saga `onboard-tenant`: its route `503`, the rest `200`, recovery in about 20 s) on the dev stack, and wrote the two challenge documents with the operability checklist of MVP 3.
+- **Not counted:** the commits of the teammate, and any PR after the time of writing.
 
 ## 3. Blockers and risks
--
+- **GitHub Actions of the organization is still locked by billing.** The last run on 2026-11-14 failed again with "The job was not started because your account is locked due to a billing issue" (https://github.com/code-corhuila/multi-tour-security/actions/runs/43655297534). Every PR records the failed job and the local checks that replace it.
+- **The release to `main` and the tag `v3.0.0` are not done.** `main` needs the approval of the professor (`@ariel5253`); the release branch, its five elements and the tag are prepared for that, not merged. The last tag in my repositories is `v2.0.0`.
+- **Many stories wait in `In Review`.** HU-OPS-001, -003, -004, -005 and -008, HU-IDA-004, HU-SEC-005, HU-SEC-006 and HU-WRK-006 are finished on my side; a criterion of each needs commercial-reservation or cash-reporting, the services of my teammate, which I may only read and test, never change.
+- **Load and chaos were run once, by hand, on dev; they are not in CI.** On 2026-11-14 the load test met its SLO and the chaos experiment showed the expected `503` of one route only (see the challenge). There is no end-to-end money path: payments and refunds are in the services of my teammate. The suite has unit, integration against the real PostgreSQL (`TEST_DATABASE_URL`) and contract validation; the gaps are written in the week 15 challenge.
+- **Testcontainers is not used on purpose.** The norm fixes `TEST_DATABASE_URL` for the integration tests (CLAUDE.md, TDD by spec), so the integration tests run against a PostgreSQL service of the job.
+- **`infra-postgres` #45 is still open:** the development key and token scripts must not reach `main` (norm 5.5.2).
 
 ## 4. Plan for next week
--
+- Open the release `release/3.0.0` of each of my repositories from `main`, one commit per story validated in `qa` with `cherry-pick -x`, with the five elements of the norm, and ask the professor for the approval; then the tag `v3.0.0`.
+- Merge `infra-postgres` #45 before the release.
+- Run the operability checklist on the `qa` stack: backup and restore, rollback to `v2.0.0`, and the load and chaos runs of this week again on `qa`.
+- Re-run the PRs in CI when Actions is unlocked.
+- Prepare the final presentation, the documentation and the handover.
 
 ## 5. Compliance self-check
-- [ ] Conventional Commits - `type(scope): summary`
-- [ ] Per-environment HU branch + PR to that environment (hu-xxx-dev -> develop, ...)
-- [ ] Testable acceptance criteria
-- [ ] Tests added/updated (unit / integration)
-- [ ] DDD / hexagonal boundaries respected (domain has no I/O)
-- [ ] No secrets; config via environment variables
+- [x] Conventional Commits - `type(scope): summary` - the titles of the 408 PRs follow it (`feat(saga)`, `feat(http)`, `test(usecase)`, `fix(config)`, `chore(promote)`, `chore(deps)`, `docs(07-api)`)
+- [x] Per-environment HU branch + PR to that environment (hu-xxx-dev -> develop, ...) - code from `feat/`, `fix/` and `chore/` branches to `develop`; promotion from `chore/promote-<HU>` branches to `qa` with `cherry-pick -x` (git refuses a `qa/` branch while the branch `qa` exists: "cannot lock ref 'refs/heads/qa/…': 'refs/heads/qa' exists"). Nothing reached `main`
+- [x] Testable acceptance criteria - every spec of the week names the test of each criterion in its "Tests" section (for example Docs #847 for HU-SEC-007)
+- [x] Tests added/updated (unit / integration) - for example relay #41 (a `4xx` of a consumer is one attempt per run), operations-cost-api #106 and `infra-postgres` #46 (every migration runner and its second run); the CI did not run them (locked), the local checks did
+- [x] DDD / hexagonal boundaries respected (domain has no I/O) - the two new sagas keep the steps and the compensations in the core with ports, and the store and the HTTP clients in adapters (`multi-tour-workflow-cancel-departure` #5 to #8)
+- [x] No secrets; config via environment variables - the service tokens and the SMTP settings come from the environment, and #45 keeps the development scripts out of `main`
 
 ## 6. Evidence links
--
+- Class summary image for week 15 (testing and release): [WeeklySummary/Week-15.webp](./WeeklySummary/Week-15.webp)
+- Weekly Challenge week 15, Session 1 (complete your test suite): [WeeklySummary/WeeklyChallenge/Test-Suite-At-Scale-Multitour.md](./WeeklySummary/WeeklyChallenge/Test-Suite-At-Scale-Multitour.md)
+- Weekly Challenge week 15, Session 2 (ship MVP 3): [WeeklySummary/WeeklyChallenge/MVP3-Release-And-Operability-Multitour.md](./WeeklySummary/WeeklyChallenge/MVP3-Release-And-Operability-Multitour.md)
+- Load test and chaos experiment, scripts and real output: [../challenge/RESULTS.md](../challenge/RESULTS.md)
+- Board: https://github.com/orgs/code-corhuila/projects/28
+- Support and emergency access: https://github.com/code-corhuila/multi-tour-docs/pull/886
+- Saga that changes the vehicles: https://github.com/code-corhuila/multi-tour-workflow-change-departure-vehicles/pull/3
+- Saga that cancels a departure: https://github.com/code-corhuila/multi-tour-workflow-cancel-departure/pull/6
+- Notifications worker: https://github.com/code-corhuila/multi-tour-worker-notifications/pull/2
+- Logo and commercial images: https://github.com/code-corhuila/multi-tour-docs/pull/1006
+- A promotion to `qa` with its trace: https://github.com/code-corhuila/multi-tour-security/pull/158
+- Backup and restore of the platform: https://github.com/code-corhuila/multi-tour-infra-postgres/pull/47
+- A failed CI job (billing lock): https://github.com/code-corhuila/multi-tour-security/actions/runs/43655297534

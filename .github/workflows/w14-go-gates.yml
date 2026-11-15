@@ -1,0 +1,53 @@
+# Week 14 challenge: the blocking gates of one Go service, written once and called by each service pipeline.
+# Each step fails the run: build, lint (gofmt, go vet), type check (the compiler), tests, coverage floor and security.
+name: w14-go-gates
+
+on:
+  workflow_call:
+    inputs:
+      dir:
+        required: true
+        type: string
+      min-coverage:
+        required: false
+        type: number
+        default: 80
+
+permissions:
+  contents: read
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ${{ inputs.dir }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: ${{ inputs.dir }}/go.mod
+      - name: lint - gofmt
+        run: test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
+      - name: lint and type check - go vet
+        run: go vet ./...
+      - name: build
+        run: go build ./...
+      - name: tests with coverage
+        run: go test -coverprofile=cover.out ./...
+      - name: coverage floor
+        run: |
+          total=$(go tool cover -func=cover.out | awk '/^total:/ {sub("%","",$3); print $3}')
+          echo "coverage ${total}% (floor ${{ inputs.min-coverage }}%)"
+          awk -v t="$total" -v m="${{ inputs.min-coverage }}" 'BEGIN { exit (t + 0 < m + 0) }'
+      - name: security - known vulnerabilities
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@v1.1.4
+          govulncheck ./...
+      - name: security - secrets in the history
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
