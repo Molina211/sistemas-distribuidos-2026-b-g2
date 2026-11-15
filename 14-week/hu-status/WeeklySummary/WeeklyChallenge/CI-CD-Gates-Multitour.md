@@ -42,4 +42,25 @@ The mapping of every DoD item to a gate is in the session 2 document,
 
 ## 4. Practical run in my fork
 
-[PENDIENTE: if authorized, a copy of the gates of one Go service and one portal with a path-filtered pipeline, run in my fork; see the session 2 document]
+Since Actions of the organization is locked, the gates were copied into my fork and run there on Saturday 2026-11-14,
+on two reduced Go services (`14-week/challenge/services/booking`, money in minor units, and `notices`, the subject of a
+business e-mail). The gates are written once in a reusable workflow, `.github/workflows/w14-go-gates.yml`, and every
+step fails the run:
+
+| Gate | Step |
+|---|---|
+| Lint | `gofmt -l .` must be empty |
+| Lint and type check | `go vet ./...` (and the compiler) |
+| Build | `go build ./...` |
+| Tests | `go test -coverprofile=cover.out ./...` |
+| Coverage | total coverage at least 80 % (`min-coverage`); the comparison was checked by hand: 79.9 fails, 80.0 and 100.0 pass |
+| Security | `govulncheck ./...` (known vulnerabilities) and `gitleaks` (secrets in the history) |
+
+First run, commit `777cd1b`: both pipelines green, coverage 100.0 % against the floor of 80 %, "No vulnerabilities
+found", "no leaks found".
+[w14-booking](https://github.com/Molina211/sistemas-distribuidos-2026-b-g2/actions/runs/43664138153) ·
+[w14-notices](https://github.com/Molina211/sistemas-distribuidos-2026-b-g2/actions/runs/43664138132)
+
+Not covered by this copy: a portal (its gates are `npm run lint`, `format:check`, `build` and `test`, already in
+`operations-cost-portal`), the protection of `main` (the fork is a personal repository with direct commits, the rule of
+the Weekly), and pushing a tagged image to a registry.

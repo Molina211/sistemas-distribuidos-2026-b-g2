@@ -44,7 +44,7 @@ Chronological, local time (UTC-5), from Monday 2026-11-02 08:40 to Monday 2026-1
 - **2026-11-08, afternoon.** Built HU-SEC-004, password recovery, end to end.
 - **2026-11-08 to 2026-11-09.** Built part A of HU-OPS-002, parts A and B of HU-OPS-003, and the job 3 worker of HU-WRK-003.
 - **2026-11-09, morning.** Specified the relay routes and the audited events (specs 007 and 008), HU-SEC-008 and HU-OPS-004.
-- **Weekly challenges.** Wrote the two challenges of week 14 as documents that map our Definition of Done to the gates that exist.
+- **Weekly challenges.** Wrote the two challenges of week 14, which map our Definition of Done to the gates that exist. On 2026-11-14, since Actions of the organization is locked, I copied the gates into my fork with two reduced Go services and a path-filtered pipeline for each. Both ran green (coverage 100 % against a floor of 80 %, no vulnerabilities, no leaks), and a change to one folder ran only its pipeline. This was done after the cut, so I do not count it in the window above.
 - **Not counted:** the commits of the teammate, and anything after 2026-11-09 08:40, which is in week 15.
 
 ## 3. Blockers and risks
@@ -74,6 +74,7 @@ Chronological, local time (UTC-5), from Monday 2026-11-02 08:40 to Monday 2026-1
 - Class summary image for week 14 (CI/CD gates and planning): [WeeklySummary/Week-14.webp](./WeeklySummary/Week-14.webp)
 - Weekly Challenge week 14, Session 1 (set up your CI/CD): [WeeklySummary/WeeklyChallenge/CI-CD-Gates-Multitour.md](./WeeklySummary/WeeklyChallenge/CI-CD-Gates-Multitour.md)
 - Weekly Challenge week 14, Session 2 (DoD to gates, protections, per-service pipelines, MVP 3 slicing): [WeeklySummary/WeeklyChallenge/DoD-Gates-And-Pipeline-Stories-Multitour.md](./WeeklySummary/WeeklyChallenge/DoD-Gates-And-Pipeline-Stories-Multitour.md)
+- Gates copied into the fork, path-filtered per service: [../challenge/services/](../challenge/services/) · runs https://github.com/Molina211/sistemas-distribuidos-2026-b-g2/actions/runs/43664138153 , https://github.com/Molina211/sistemas-distribuidos-2026-b-g2/actions/runs/43664321789
 - Board: https://github.com/orgs/code-corhuila/projects/28
 - Password recovery end to end: https://github.com/code-corhuila/multi-tour-docs/pull/816
 - Internal users of a tenant: https://github.com/code-corhuila/multi-tour-security/pull/69

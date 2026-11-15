@@ -45,7 +45,15 @@ on:
     paths-ignore: ["**.md"]
 ```
 
-[PENDIENTE: if authorized, a copy in my fork with two services in two folders and `paths` filters, to show that only the touched one runs]
+**Run in my fork on 2026-11-14.** Two services in two folders, each with its own pipeline (`w14-booking.yml`,
+`w14-notices.yml`) filtered by `on.push.paths` to its folder, and both calling the same gates
+(`w14-go-gates.yml`, see the session 1 document):
+
+| Commit | What it changed | Pipelines that ran |
+|---|---|---|
+| `777cd1b` | Both folders (they were new) | `w14-booking` and `w14-notices`, both green |
+| `6d48b02` | Only `services/notices/subject_test.go` | Only `w14-notices`, green ([run](https://github.com/Molina211/sistemas-distribuidos-2026-b-g2/actions/runs/43664321789)); `w14-booking` did not start |
+| The commit of these documents | Only Markdown under `14-week/hu-status` and `15-week` | None |
 
 ## 4. Cross-service contract tests and smoke test
 
