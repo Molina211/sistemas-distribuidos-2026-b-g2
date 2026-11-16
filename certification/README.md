@@ -50,4 +50,9 @@
 
 ## Skills summary
 
-<5 to 7 lines in English, first person, naming at least three concrete design techniques from the course.>
+Throughout this course, I learned how to design cloud architectures by evaluating security, reliability, performance, cost, and maintainability.
+I learned to use Huawei Cloud services such as ECS, ELB, VPC, and RDS to build scalable and reliable solutions.
+I understood how to apply Auto Scaling to manage resources based on demand and improve system performance.
+I learned about disaster recovery strategies using RTO and RPO to reduce downtime and data loss.
+I also gained knowledge of Infrastructure as Code using Terraform to automate infrastructure deployment.
+Finally, I learned how to use containers, distributed architectures, and monitoring tools to build and manage cloud solutions.
