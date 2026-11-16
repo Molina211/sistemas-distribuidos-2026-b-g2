@@ -3,17 +3,18 @@
 **The challenge:** promote to `main`, tag `v3.0.0`, verify the operability checklist (load, chaos, rollback,
 security), and demo the system under stress and failure.
 
-**Scope:** the state on 2026-11-14 and the plan of the release. `main` is production: it changes only through a
-`release/` branch with the approval of the professor (norm §12, golden rule 6), so the release is prepared, not merged.
+**Scope:** the plan of the release as written on 2026-11-14, and its outcome on 2026-11-15 (section 1). `main` is production: it changes only through a
+`release/` branch with the approval of the professor (norm §12, golden rule 6).
 
 ## 1. Where the code is
 
-| Step | State on 2026-11-14 |
+| Step | State on 2026-11-15, 22:00 |
 |---|---|
 | Finished stories in `develop` | Yes, every story of my repositories (see the hu-status of weeks 14 and 15) |
-| Promotion to `qa` | Done on 2026-11-13 and 2026-11-14: 147 PRs, `chore/promote-<HU>` branches with `git cherry-pick -x` |
-| `release/3.0.0` to `main` | Not opened yet |
-| Tag `v3.0.0` | Not created; the last tag is `v2.0.0` (2026-10-15) |
+| Promotion to `qa` | Done from 2026-11-13 to 2026-11-15: 207 PRs `chore(promote)`, `chore/promote-<HU>` branches with `git cherry-pick -x` |
+| `release/3.0.0` to `main` | Merged on 2026-11-15 (01:05 to 01:07) with a merge commit in 13 of my repositories, for example [security #162](https://github.com/code-corhuila/multi-tour-security/pull/162) and [operations-cost-api #117](https://github.com/code-corhuila/multi-tour-operations-cost-api/pull/117); `infra-postgres` #45 was merged first (2026-11-15 00:01 local) |
+| Tag `v3.0.0` | Created on every repository with a release, on the merge commit in `main`, and a GitHub Release page for each; also `v3.0.1` of `multi-tour-infra-postgres` (start of the platform in layers) and `v3.0.0` of `multi-tour-docs` |
+| Release 3.1.0 of `multi-tour-front` | Open for the approval of the professor: [front #119](https://github.com/code-corhuila/multi-tour-front/pull/119) |
 
 ## 2. How the release is done (norm §11)
 
